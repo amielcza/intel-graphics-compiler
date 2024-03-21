@@ -18,12 +18,12 @@ permissions: read-all
 
 jobs:
   download-OpenCL-Clang: # openCL Clang is downloaded from intel/intel-graphics-compiler releases
-    if: github.repository == 'intel/intel-graphics-compiler'
-    runs-on: self-hosted
+    if: github.repository == 'amielcza/intel-graphics-compiler'
+    runs-on: ubuntu
     steps:
       - uses: oprypin/find-latest-tag@v1
         with:
-          repository: intel/intel-graphics-compiler
+          repository: amielcza/intel-graphics-compiler
           releases-only: true
         id: get-latest-IGC-release-tag
       - name: caching downloaded OpenCL Clang # Downloading a new OpenCL Clang only after the new IGC is released
@@ -44,7 +44,7 @@ jobs:
         run: ls ./igc-official-release
 
   build-SPIRV-LLVM-Translator:
-    if: github.repository == 'intel/intel-graphics-compiler'
+    if: github.repository == 'amielcza/intel-graphics-compiler'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -94,7 +94,7 @@ jobs:
 
   build-IGC:
     needs: [build-SPIRV-LLVM-Translator, download-OpenCL-Clang]
-    if: github.repository == 'intel/intel-graphics-compiler'
+    if: github.repository == 'amielcza/intel-graphics-compiler'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -113,7 +113,7 @@ jobs:
 #Get OpenCL Clang
       - uses: oprypin/find-latest-tag@v1
         with:
-          repository: intel/intel-graphics-compiler
+          repository: amielcza/intel-graphics-compiler
           releases-only: true
         id: get-latest-IGC-release-tag
       - name: getting OpenCL Clang from cache from the previous job
