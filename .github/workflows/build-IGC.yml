@@ -19,7 +19,7 @@ permissions: read-all
 jobs:
   download-OpenCL-Clang: # openCL Clang is downloaded from intel/intel-graphics-compiler releases
     if: github.repository == 'intel/intel-graphics-compiler'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: oprypin/find-latest-tag@v1
         with:
