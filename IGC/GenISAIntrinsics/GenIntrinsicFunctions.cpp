@@ -82,7 +82,6 @@ public:
     static constexpr llvm::GenISAIntrinsic::ID scID = id;
     using IntrinsicDefinitionT = IntrinsicDefinition<scID>;
     using Argument = typename IntrinsicDefinitionT::Argument;
-// test
     static bool classof(const llvm::Value* pValue)
     {
         return llvm::isa<llvm::Function>(pValue) &&
