@@ -121,7 +121,7 @@ jobs:
 
   build-IGC:
     needs: [build-SPIRV-LLVM-Translator, download-OpenCL-Clang]
-    if: intelgithub.repository == 'amielcza/intel-graphics-compiler'
+    if: github.repository == 'amielcza/intel-graphics-compiler'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
