@@ -29,7 +29,7 @@ jobs:
     steps:
       - uses: oprypin/find-latest-tag@v1
         with:
-          repository: amielcza/intel-graphics-compiler
+          repository: intel/intel-graphics-compiler
           releases-only: true
         id: get-latest-IGC-release-tag
       - name: set initial cache key
@@ -74,7 +74,7 @@ jobs:
           restore-keys: ${{ env.ORIGINAL_CLANG_CACHE_KEY }}
 
   build-SPIRV-LLVM-Translator:
-    if: github.repository == 'intel/intel-graphics-compiler'
+    if: intelgithub.repository == 'amielcza/intel-graphics-compiler'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -121,7 +121,7 @@ jobs:
 
   build-IGC:
     needs: [build-SPIRV-LLVM-Translator, download-OpenCL-Clang]
-    if: github.repository == 'amielcza/intel-graphics-compiler'
+    if: intelgithub.repository == 'amielcza/intel-graphics-compiler'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -135,7 +135,7 @@ jobs:
 #Get OpenCL Clang
       - uses: oprypin/find-latest-tag@v1
         with:
-          repository: amielcza/intel-graphics-compiler
+          repository: intel/intel-graphics-compiler
           releases-only: true
         id: get-latest-IGC-release-tag
       - name: getting OpenCL Clang from cache from the previous job
