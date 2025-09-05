@@ -74,7 +74,7 @@ jobs:
           restore-keys: ${{ env.ORIGINAL_CLANG_CACHE_KEY }}
 
   build-SPIRV-LLVM-Translator:
-    if: intelgithub.repository == 'amielcza/intel-graphics-compiler'
+    if: github.repository == 'amielcza/intel-graphics-compiler'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
