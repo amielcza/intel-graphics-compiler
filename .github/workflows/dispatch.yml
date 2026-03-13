@@ -1,0 +1,28 @@
+name: Dispatch Action
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger specifications refresh in other repo
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.DISPATCH_TOKEN }}
+          script: |
+            await github.rest.repos.createDispatchEvent({
+              owner: context.repo.owner,
+              repo: 'drivers.gpu.unified',
+              event_type: 'platform_headers_updated',
+              client_payload: {
+                ref: context.ref,
+                sha: context.sha,
+                actor: context.actor,
+              },
+            });
