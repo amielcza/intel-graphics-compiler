@@ -12,7 +12,7 @@ permissions: read-all
 
 jobs:
   get-release-tag:
-    if: github.repository == 'intel/intel-graphics-compiler'
+    if: github.repository == 'amielcza/intel-graphics-compiler'
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.get-latest-IGC-release-tag.outputs.tag }}
