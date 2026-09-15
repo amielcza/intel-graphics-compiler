@@ -63,10 +63,6 @@ fi
 apt-get install -y llvm-"$LLVM_VERSION" llvm-"$LLVM_VERSION"-dev clang-"$LLVM_VERSION" liblld-"$LLVM_VERSION" liblld-"$LLVM_VERSION"-dev
 echo "[Build Status] LLVM INSTALLED"
 
-# Query the installed toolchain instead of assuming "$LLVM_VERSION".0.0.
-# LLVMConfigVersion.cmake only accepts a request with a matching major.minor,
-# and since LLVM 21 the releases are numbered X.1.Y (llvm-22 is 22.1.8), so
-# a X.0.0 request is rejected by find_package.
 LLVM_CONFIG="llvm-config-$LLVM_VERSION"
 if ! command -v "$LLVM_CONFIG" >/dev/null 2>&1; then
     LLVM_CONFIG="/usr/lib/llvm-$LLVM_VERSION/bin/llvm-config"
@@ -76,12 +72,8 @@ echo "[Build Status] LLVM_VERSION_PREFERRED = $LLVM_VERSION_PREFERRED"
 
 echo "[Build Status] Prepare install OpenCL Clang"
 dpkg -i ./igc-official-release/*.deb
-CCLANG_LIB=$(ls /usr/local/lib/libopencl-clang*.so."$LLVM_VERSION"* 2>/dev/null | head -n 1)
-echo "[Build Status] OpenCL Clang library = $CCLANG_LIB"
-if [ -n "$CCLANG_LIB" ] && [ ! -e "/usr/local/lib/libopencl-clang.so" ]; then
-    # Symlink to a library name CMake is set up to handle until either
-    # CMake is updated or the library name is changed back.
-    ln -s "$CCLANG_LIB" /usr/local/lib/libopencl-clang.so
+if [ -e "/usr/local/lib/libopencl-clang2.so" ] && [ ! -e "/usr/local/lib/libopencl-clang.so" ]; then
+    ln -s /usr/local/lib/libopencl-clang2.so /usr/local/lib/libopencl-clang.so
 fi
 echo "[Build Status] OpenCL Clang INSTALLED"
 
