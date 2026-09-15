@@ -43,7 +43,15 @@ fi
 apt-get install -y llvm-"$LLVM_VERSION" llvm-"$LLVM_VERSION"-dev clang-"$LLVM_VERSION" liblld-"$LLVM_VERSION" liblld-"$LLVM_VERSION"-dev
 echo "[Build Status] LLVM INSTALLED"
 
-LLVM_VERSION_PREFERRED="$LLVM_VERSION".0.0
+# Query the installed toolchain instead of assuming "$LLVM_VERSION".0.0.
+# LLVMConfigVersion.cmake only accepts a request with a matching major.minor,
+# and since LLVM 21 the releases are numbered X.1.Y (llvm-22 is 22.1.8), so
+# a X.0.0 request is rejected by find_package.
+LLVM_CONFIG="llvm-config-$LLVM_VERSION"
+if ! command -v "$LLVM_CONFIG" >/dev/null 2>&1; then
+    LLVM_CONFIG="/usr/lib/llvm-$LLVM_VERSION/bin/llvm-config"
+fi
+LLVM_VERSION_PREFERRED=$("$LLVM_CONFIG" --version | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
 echo "[Build Status] LLVM_VERSION_PREFERRED = $LLVM_VERSION_PREFERRED"
 
 echo "[Build Status] build and install SPIRV-LLVM-Translator"
