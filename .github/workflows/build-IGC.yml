@@ -18,7 +18,7 @@ permissions: read-all
 
 jobs:
   get-release-tag:
-    if: github.repository == 'intel/intel-graphics-compiler'
+    if: github.repository == 'amielcza/intel-graphics-compiler'
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.get-latest-IGC-release-tag.outputs.tag }}
@@ -26,12 +26,12 @@ jobs:
       - name: get latest IGC release tag
         id: get-latest-IGC-release-tag
         run: |
-          TAG=$(curl -sSL https://api.github.com/repos/intel/intel-graphics-compiler/releases | jq -r '[.[] | select(.draft | not)][0].tag_name')
+          TAG=$(curl -sSL https://api.github.com/repos/amielcza/intel-graphics-compiler/releases | jq -r '[.[] | select(.draft | not)][0].tag_name')
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
-  download-OpenCL-Clang: # openCL Clang is downloaded from intel/intel-graphics-compiler releases
+  download-OpenCL-Clang: # openCL Clang is downloaded from amielcza/intel-graphics-compiler releases
     needs: [get-release-tag]
-    if: github.repository == 'intel/intel-graphics-compiler'
+    if: github.repository == 'amielcza/intel-graphics-compiler'
     runs-on: ubuntu-latest
     env:
       CLANG_CACHE_VALID: true
@@ -65,7 +65,7 @@ jobs:
         if:  ${{ steps.cache-igc-release.outputs.cache-hit != 'true' || env.CLANG_CACHE_VALID != 'true' }}
         working-directory: ./igc-official-release
         # To install openCL clang from Deb package, IGC must also be installed. Therefore, the last IGC release is also downloaded.
-        run: curl -sSL https://api.github.com/repos/intel/intel-graphics-compiler/releases/tags/${{ needs.get-release-tag.outputs.tag }} | jq -r '.assets[].browser_download_url' | egrep 'opencl-|core-' | wget -qi -
+        run: curl -sSL https://api.github.com/repos/amielcza/intel-graphics-compiler/releases/tags/${{ needs.get-release-tag.outputs.tag }} | jq -r '.assets[].browser_download_url' | egrep 'opencl-|core-' | wget -qi -
       - name: checking if downloaded deb files are here
         run: |
           ls ./igc-official-release
@@ -82,7 +82,7 @@ jobs:
           restore-keys: ${{ env.ORIGINAL_CLANG_CACHE_KEY }}
 
   build-SPIRV-LLVM-Translator:
-    if: github.repository == 'intel/intel-graphics-compiler'
+    if: github.repository == 'amielcza/intel-graphics-compiler'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -129,7 +129,7 @@ jobs:
 
   build-IGC:
     needs: [build-SPIRV-LLVM-Translator, download-OpenCL-Clang]
-    if: github.repository == 'intel/intel-graphics-compiler'
+    if: github.repository == 'amielcza/intel-graphics-compiler'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
