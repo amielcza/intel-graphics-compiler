@@ -65,7 +65,7 @@ jobs:
         if:  ${{ steps.cache-igc-release.outputs.cache-hit != 'true' || env.CLANG_CACHE_VALID != 'true' }}
         working-directory: ./igc-official-release
         # To install openCL clang from Deb package, IGC must also be installed. Therefore, the last IGC release is also downloaded.
-        run: curl -sSL https://api.github.com/repos/amielcza/intel-graphics-compiler/releases/tags/${{ needs.get-release-tag.outputs.tag }} | jq -r '.assets[].browser_download_url' | egrep 'opencl-|core-' | wget -qi -
+        run: curl -sSL https://api.github.com/repos/intel/intel-graphics-compiler/releases/tags/${{ needs.get-release-tag.outputs.tag }} | jq -r '.assets[].browser_download_url' | egrep 'opencl-|core-' | wget -qi -
       - name: checking if downloaded deb files are here
         run: |
           ls ./igc-official-release
