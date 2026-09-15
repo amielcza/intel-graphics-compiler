@@ -76,10 +76,12 @@ echo "[Build Status] LLVM_VERSION_PREFERRED = $LLVM_VERSION_PREFERRED"
 
 echo "[Build Status] Prepare install OpenCL Clang"
 dpkg -i ./igc-official-release/*.deb
-if [ -f "/usr/local/lib/libopencl-clang2.so.$LLVM_VERSION" ] && [ ! -f "/usr/local/lib/libopencl-clang.so" ]; then
+CCLANG_LIB=$(ls /usr/local/lib/libopencl-clang*.so."$LLVM_VERSION"* 2>/dev/null | head -n 1)
+echo "[Build Status] OpenCL Clang library = $CCLANG_LIB"
+if [ -n "$CCLANG_LIB" ] && [ ! -e "/usr/local/lib/libopencl-clang.so" ]; then
     # Symlink to a library name CMake is set up to handle until either
     # CMake is updated or the library name is changed back.
-    ln -s /usr/local/lib/libopencl-clang2.so.$LLVM_VERSION /usr/local/lib/libopencl-clang.so
+    ln -s "$CCLANG_LIB" /usr/local/lib/libopencl-clang.so
 fi
 echo "[Build Status] OpenCL Clang INSTALLED"
 
